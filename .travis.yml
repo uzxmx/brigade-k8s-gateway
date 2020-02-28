@@ -1,0 +1,12 @@
+language: go
+
+go:
+  - 1.13
+
+services:
+  - docker
+
+script:
+  - make docker-login
+  - make docker-build DOCKER_REPO=uzxmx/brigade-k8s-gateway DOCKER_TAG=$TRAVIS_TAG
+  - make docker-push DOCKER_REPO=uzxmx/brigade-k8s-gateway DOCKER_TAG=$TRAVIS_TAG
