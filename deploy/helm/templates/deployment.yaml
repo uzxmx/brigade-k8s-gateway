@@ -33,6 +33,7 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.registry }}/{{ .Values.name }}:{{ default .Chart.AppVersion .Values.tag }}"
         imagePullPolicy: {{ default "IfNotPresent" .Values.pullPolicy }}
+        command: ["/usr/local/bin/k8s-gateway", "--namespace", "{{ .Values.eventNamespace }}"]
         env:
           - name: GATEWAY_NAMESPACE
             valueFrom:

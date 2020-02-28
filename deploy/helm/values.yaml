@@ -14,6 +14,8 @@ pullPolicy: "IfNotPresent"
 ## What to watch
 project: brigade-830c16d4aaf6f5490937ad719afd8490a5bcbef064d397411043ac
 
+eventNamespace: default
+
 ## Define the filters that you want to run.
 ## Filters are evaluated in order (top to bottom). Every filter must either
 ## 'accept' or 'reject' an event. The final rule is the default rule, and
