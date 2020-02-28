@@ -157,7 +157,7 @@ func (this *gateway) processNextItem() bool {
 
 func (this *gateway) createInformer() {
 	sel := labels.Set{
-	//"heritage": "helm",
+		//"heritage": "helm",
 	}
 
 	// Initial test: Just watch all events.
@@ -171,11 +171,19 @@ func (this *gateway) createInformer() {
 			return this.clientset.CoreV1().Events(this.namespace).Watch(options)
 		},
 	}
+	queueAdd := func(obj interface{}) {
+		if key, err := cache.MetaNamespaceKeyFunc(obj); err == nil {
+			log.Println("Adding to workqueue: ", key)
+			this.queue.Add(key)
+		}
+	}
 	reh := cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
-			if key, err := cache.MetaNamespaceKeyFunc(obj); err == nil {
-				log.Println("Adding to workqueue: ", key)
-				this.queue.Add(key)
+			queueAdd(obj)
+		},
+		UpdateFunc: func(oldObj interface{}, newObj interface{}) {
+			if oldObj != nil {
+				queueAdd(newObj)
 			}
 		},
 	}
