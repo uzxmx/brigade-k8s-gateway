@@ -7,6 +7,7 @@ services:
   - docker
 
 script:
+  - set -e
   - make docker-login
-  - DOCKER_REPO=uzxmx/brigade-k8s-gateway DOCKER_TAG=$TRAVIS_TAG make docker-build
-  - DOCKER_REPO=uzxmx/brigade-k8s-gateway DOCKER_TAG=$TRAVIS_TAG make docker-push
+  - DOCKER_REPO=$TRAVIS_REPO_SLUG DOCKER_TAG=$TRAVIS_TAG make docker-build
+  - DOCKER_REPO=$TRAVIS_REPO_SLUG DOCKER_TAG=$TRAVIS_TAG make docker-push
