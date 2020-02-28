@@ -1,5 +1,5 @@
 DOCKER_REPO ?= deis/brigade-k8s-gateway
-DOCKER_TAG  ?= latest
+DOCKER_TAG  := $(if $(DOCKER_TAG),$(DOCKER_TAG),latest)
 
 .PHONY: build
 build:
