@@ -20,3 +20,15 @@ docker-push:
 .PHONY: docker-login
 docker-login:
 	echo "$(DOCKER_PASSWORD)" | docker login -u "$(DOCKER_USERNAME)" --password-stdin
+
+.PHONY: dist
+dist:
+	mkdir -p dist
+	cp -R deploy/helm dist/brigade-k8s-gateway
+	[ -n "$(VERSION)" ] && sed -i '' -Ee 's/^(version:).*$$/\1 $(VERSION)/' dist/brigade-k8s-gateway/Chart.yaml && \
+		sed -i '' -Ee 's/^(tag:).*$$/\1 $(VERSION)/' dist/brigade-k8s-gateway/values.yaml
+	(cd dist && tar zcf brigade-k8s-gateway-$(VERSION).tgz brigade-k8s-gateway)
+
+.PHONY: clean
+clean:
+	rm -rf bin/brigade-k8s-gateway rootfs/brigade-k8s-gateway dist
