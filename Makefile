@@ -19,7 +19,7 @@ build:
 # DOCKER_REGISTRY to your own personal registry if you are not pushing to the official upstream.
 .PHONY: docker-build
 docker-build:
-	GOOS=linux GOARCH=amd64 GO111MODULE=on go build -o rootfs/k8s-gateway ./cmd/...
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o rootfs/k8s-gateway -ldflags '-w -s -extldflags "-static"' ./cmd/...
 	docker build -t "$(DOCKER_REPO):$(DOCKER_TAG)" .
 
 # You must be logged into DOCKER_REGISTRY before you can push.
@@ -41,4 +41,4 @@ dist:
 
 .PHONY: clean
 clean:
-	rm -rf bin/brigade-k8s-gateway rootfs/brigade-k8s-gateway dist
+	rm -rf bin/k8s-gateway rootfs/k8s-gateway dist
